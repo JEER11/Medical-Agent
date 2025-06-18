@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{ project_name }} | AI Assistant</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+<body>
+  <div class="app-wrapper">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div id="history-popups" class="history-popups-sidebar"></div>
+      <div>
+        <h2>History</h2>
+        <div id="chat-history" class="history"></div>
+      </div>
+      <div class="interactions">
+        <button class="icon-button" title="Saved" onclick="saveCurrentConversation()">
+          <img src="{{ url_for('static', filename='icons/watchman.svg') }}" class="icon" alt="Saved">
+        </button>
+        <button class="icon-button" title="Surprise Me" onclick="askRandom()">
+          <img src="{{ url_for('static', filename='icons/walkman.svg') }}" class="icon" alt="Surprise">
+        </button>
+        <button class="icon-button" title="Theme" onclick="toggleTheme()">
+          <img src="{{ url_for('static', filename='icons/tv.svg') }}" class="icon" alt="Theme">
+        </button>
+        <button class="icon-button" title="Settings">
+          <img src="{{ url_for('static', filename='icons/gameboy.svg') }}" class="icon" alt="Settings">
+        </button>
+      </div>
+    </div>
+
+    <!-- Retro Draggable Window -->
+    <div class="terminal-container draggable" id="chat-window">
+      <div class="window-header" onmousedown="startDrag(event)">
+        <div class="window-title">{{ project_name }}</div>
+        <div class="window-controls">
+          <button class="minimize" onclick="minimizeWindow()">⎯</button>
+          <button class="close" onclick="closeWindow()">✕</button>
+        </div>
+      </div>
+
+      <p class="subheading">Ask anything about medical technology</p>
+
+      <div class="category-buttons">
+        <button onclick="submitPrompt('Tell me about an MRI scan')">Scan</button>
+        <button onclick="submitPrompt('What is a stethoscope used for?')">Tool</button>
+        <button onclick="submitPrompt('How does a biopsy procedure work?')">Procedure</button>
+        <button onclick="submitPrompt('What is asthma?')">Condition</button>
+        <button onclick="submitPrompt('What does Ibuprofen do?')">Medication</button>
+        <button onclick="submitPrompt('Fun fact about bones')">Fun Fact</button>
+        <button onclick="saveCurrentConversation()">Saved</button>
+      </div>
+
+      <div class="chat-area" id="chat-box">
+        <div class="ai-bubble">Hello! Ask me about medical scans, tools, or procedures.</div>
+      </div>
+
+      <form id="ask-form">
+        <textarea id="user-prompt" placeholder="> What is a CT scan?" rows="3" required></textarea>
+        <button type="submit">Ask</button>
+        <button type="button" class="clear-btn" id="clear-history">Clear History</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+  <script>
+    function startDrag(e) {
+      const win = document.getElementById("chat-window");
+      let shiftX = e.clientX - win.getBoundingClientRect().left;
+      let shiftY = e.clientY - win.getBoundingClientRect().top;
+
+      function moveAt(pageX, pageY) {
+        win.style.left = pageX - shiftX + "px";
+        win.style.top = pageY - shiftY + "px";
+      }
+
+      function onMouseMove(e) {
+        moveAt(e.pageX, e.pageY);
+      }
+
+      document.addEventListener('mousemove', onMouseMove);
+
+      document.onmouseup = () => {
+        document.removeEventListener('mousemove', onMouseMove);
+        document.onmouseup = null;
+      };
+    }
+
+    function closeWindow() {
+      document.getElementById("chat-window").style.display = "none";
+    }
+
+    function minimizeWindow() {
+      const box = document.getElementById("chat-box");
+      box.style.display = box.style.display === "none" ? "block" : "none";
+    }
+  </script>
+</body>
+</html>
