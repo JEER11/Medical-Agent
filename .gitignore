@@ -1,0 +1,24 @@
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+venv/
+env/
+
+# Env files (sensitive info)
+.env
+*.env
+
+# Logs
+*.log
+
+# SQLite or other databases
+*.sqlite3
+
+# VSCode or JetBrains IDE settings
+.vscode/
+.idea/
+
+# macOS system files (if ever shared)
+.DS_Store
